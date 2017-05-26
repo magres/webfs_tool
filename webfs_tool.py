@@ -87,10 +87,10 @@ if __name__ == "__main__":
     parser = subp.add_parser('build')
 
     parser.add_argument('output', help='Output image file')
-    parser.add_argument('-s', '--source', help='Source directory', action='append')
+    parser.add_argument('-s', '--source', help='Source directory', action='append', default=[])
     parser.add_argument('-d', '--dynamic_files', help='Files with dynamic content (default "*.htm, *.html, *.cgi, *.xml, *.bin, *.txt, *.wav")', default='*.htm, *.html, *.cgi, *.xml, *.bin, *.txt, *.wav')
-    parser.add_argument('-n', '--exclude_gzip', help='Files not to be gzipped', default='*.inc, snmp.bib')
-    parser.add_argument('-f', '--file', help='Add file to image in format path/in/image:path/on/disc', action='append')
+    parser.add_argument('-n', '--nozip_files', help='Files not to be gzipped', default='*.inc, snmp.bib')
+    parser.add_argument('-f', '--file', help='Add file to image in format path/in/image:path/on/disc', action='append', default=[])
 
     def cmd_1(args):
         files = collections.OrderedDict()
@@ -103,7 +103,7 @@ if __name__ == "__main__":
                 files[fdl[0]]=fdl[1]
             else:
                 files[os.path.basename(fdl[0])]=fdl[0]
-        write_image(files, args.output)
+        write_image(files, args.output, dynamic_files=args.dynamic_files.split(','),nozip_files=args.nozip_files.split(',') )
 
     parser.set_defaults(func=cmd_1)
 
